@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const CreatorAuthContext = createContext(null);
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://dash-mycastnow-backend.onrender.com/api';
 
 export const CreatorAuthProvider = ({ children }) => {
   const [creator, setCreator] = useState(null);

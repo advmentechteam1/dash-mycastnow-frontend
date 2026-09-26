@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 
-const API = 'http://localhost:5000/api';
+const API = import.meta.env.VITE_API_BASE_URL || 'https://dash-mycastnow-backend.onrender.com/api';
 
 const AdminProfile = () => {
   const { admin, adminToken, updateAdminState } = useAdminAuth();

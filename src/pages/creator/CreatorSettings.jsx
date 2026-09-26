@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useCreatorAuth } from '../../context/CreatorAuthContext';
 
-const API = 'http://localhost:5000/api';
+const API = import.meta.env.VITE_API_BASE_URL || 'https://dash-mycastnow-backend.onrender.com/api';
 
 const SettingToggle = ({ label, description, checked, onChange, disabled }) => (
   <div className="flex items-center justify-between py-3.5 border-b border-white/[0.06] last:border-0">

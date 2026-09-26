@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
-const API = 'http://localhost:5000/api';
+const API = import.meta.env.VITE_API_BASE_URL || 'https://dash-mycastnow-backend.onrender.com/api';
 
 /* ── Status badge ── */
 const StatusBadge = ({ active }) => (
