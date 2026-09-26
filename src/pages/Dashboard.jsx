@@ -105,20 +105,21 @@ const Dashboard = () => {
 
         {/* Logo area */}
         <div className={`flex items-center border-b border-white/[0.06] shrink-0 overflow-hidden
-          transition-all duration-300
-          ${collapsed ? 'px-3.5 py-5 justify-center' : 'px-5 py-5 gap-3'}`}
+          transition-all duration-300 h-16
+          ${collapsed ? 'px-3.5 justify-center' : 'px-4 gap-2.5'}`}
         >
-          {/* Logo icon */}
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-500/20 shrink-0">
-            <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-            </svg>
-          </div>
-          {/* Text — hidden when collapsed */}
-          <div className={`overflow-hidden transition-all duration-300 ${collapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
-            <p className="text-white font-bold text-sm leading-none whitespace-nowrap">MyCastNow</p>
-            <p className="text-violet-400 text-[11px] mt-0.5 font-medium whitespace-nowrap">Super Admin</p>
-          </div>
+          {collapsed ? (
+            <div className="w-10 h-10 rounded-xl overflow-hidden bg-black/60 border border-white/[0.08] flex items-center justify-center shrink-0 shadow-md" title="MyCastNow - Super Admin">
+              <img src="/logo.png" alt="MyCastNow" className="w-10 h-10 object-cover object-left" />
+            </div>
+          ) : (
+            <div className="flex flex-col min-w-0">
+              <img src="/logo.png" alt="MyCastNow" className="h-8 max-w-[170px] object-contain object-left" />
+              <span className="text-[10px] font-semibold text-violet-400 uppercase tracking-widest mt-0.5 whitespace-nowrap">
+                Super Admin
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Nav */}

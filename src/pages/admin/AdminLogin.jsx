@@ -52,16 +52,11 @@ const AdminLogin = () => {
 
       <div className="relative w-full max-w-md mx-4 z-10">
         {/* Branding header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 mb-4 shadow-lg shadow-cyan-500/30">
-            <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z" />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">MyCastNow</h1>
-          <div className="mt-1.5 inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold">
+        <div className="text-center mb-6">
+          <img src="/logo.png" alt="MyCastNow" className="h-16 mx-auto object-contain drop-shadow-2xl mb-1" />
+          <div className="mt-1 inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            Admin Portal Access
+            Station Admin Portal
           </div>
         </div>
 

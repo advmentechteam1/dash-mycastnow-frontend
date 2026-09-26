@@ -95,23 +95,17 @@ const AdminDashboard = () => {
         <div>
           <div
             className={`flex items-center border-b border-white/[0.06] h-16 shrink-0 transition-all duration-300 ${
-              collapsed ? 'px-3.5 justify-center' : 'px-5 gap-3'
+              collapsed ? 'px-3.5 justify-center' : 'px-4 gap-2.5'
             }`}
           >
-            {/* Logo Icon */}
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/25 shrink-0">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z" />
-              </svg>
-            </div>
-
-            {/* Brand Title (Hidden when collapsed) */}
-            {!collapsed && (
-              <div className="overflow-hidden transition-all duration-300">
-                <span className="font-bold text-white tracking-tight text-base block leading-none whitespace-nowrap">
-                  MyCastNow
-                </span>
-                <span className="text-[10px] font-semibold text-cyan-400 uppercase tracking-widest mt-1 block whitespace-nowrap">
+            {collapsed ? (
+              <div className="w-10 h-10 rounded-xl overflow-hidden bg-black/60 border border-white/[0.08] flex items-center justify-center shrink-0 shadow-md" title="MyCastNow - Admin Portal">
+                <img src="/logo.png" alt="MyCastNow" className="w-10 h-10 object-cover object-left" />
+              </div>
+            ) : (
+              <div className="flex flex-col min-w-0">
+                <img src="/logo.png" alt="MyCastNow" className="h-8 max-w-[170px] object-contain object-left" />
+                <span className="text-[10px] font-semibold text-cyan-400 uppercase tracking-widest mt-0.5 whitespace-nowrap">
                   Admin Portal
                 </span>
               </div>

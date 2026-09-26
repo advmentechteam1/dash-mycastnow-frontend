@@ -95,23 +95,17 @@ const UserDashboard = () => {
         <div>
           <div
             className={`flex items-center border-b border-white/[0.06] h-16 shrink-0 transition-all duration-300 ${
-              collapsed ? 'px-3.5 justify-center' : 'px-5 gap-3'
+              collapsed ? 'px-3.5 justify-center' : 'px-4 gap-2.5'
             }`}
           >
-            {/* Logo Icon */}
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/25 shrink-0">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-              </svg>
-            </div>
-
-            {/* Brand Title (Hidden when collapsed) */}
-            {!collapsed && (
-              <div className="overflow-hidden transition-all duration-300">
-                <span className="font-bold text-white tracking-tight text-base block leading-none whitespace-nowrap">
-                  MyCastNow
-                </span>
-                <span className="text-[10px] font-semibold text-emerald-400 uppercase tracking-widest mt-1 block whitespace-nowrap">
+            {collapsed ? (
+              <div className="w-10 h-10 rounded-xl overflow-hidden bg-black/60 border border-white/[0.08] flex items-center justify-center shrink-0 shadow-md" title="MyCastNow - Listener Space">
+                <img src="/logo.png" alt="MyCastNow" className="w-10 h-10 object-cover object-left" />
+              </div>
+            ) : (
+              <div className="flex flex-col min-w-0">
+                <img src="/logo.png" alt="MyCastNow" className="h-8 max-w-[170px] object-contain object-left" />
+                <span className="text-[10px] font-semibold text-emerald-400 uppercase tracking-widest mt-0.5 whitespace-nowrap">
                   Listener Space
                 </span>
               </div>
