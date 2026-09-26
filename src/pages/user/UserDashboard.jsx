@@ -53,10 +53,16 @@ const BOTTOM_NAV_ITEMS = [
 const UserDashboard = () => {
   const { user, logoutUser } = useUserAuth();
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Close mobile drawer on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -85,29 +91,54 @@ const UserDashboard = () => {
 
   return (
     <div className="flex h-screen bg-[#070e13] overflow-hidden text-slate-100 font-sans selection:bg-emerald-500/20 selection:text-emerald-300">
-      {/* ── LEFT SIDEBAR (Sticky, not scrollable) ── */}
+      {/* ── Mobile Drawer Backdrop ── */}
+      {mobileOpen && (
+        <div
+          onClick={() => setMobileOpen(false)}
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 md:hidden transition-opacity"
+        />
+      )}
+
+      {/* ── LEFT SIDEBAR (Sticky, not scrollable on desktop; slide drawer on mobile) ── */}
       <aside
-        className={`flex flex-col justify-between shrink-0 bg-[#070e13]/95 backdrop-blur-xl border-r border-white/[0.07] transition-all duration-300 relative z-30 ${
-          collapsed ? 'w-[68px]' : 'w-64'
+        className={`flex flex-col justify-between shrink-0 bg-[#070e13] md:bg-[#070e13]/95 backdrop-blur-xl border-r border-white/[0.07] transition-all duration-300 fixed inset-y-0 left-0 z-50 md:relative md:z-30 overflow-hidden ${
+          mobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'
+        } ${
+          collapsed ? 'w-64 md:w-[68px]' : 'w-64'
         }`}
       >
         {/* Top: Logo area */}
         <div>
           <div
-            className={`flex items-center border-b border-white/[0.06] shrink-0 transition-all duration-300 ${
-              collapsed ? 'h-16 px-3 justify-center' : 'h-[78px] px-4'
+            className={`flex items-center justify-between border-b border-white/[0.06] shrink-0 transition-all duration-300 ${
+              collapsed ? 'h-16 px-3 md:justify-center' : 'h-[78px] px-4'
             }`}
           >
             {collapsed ? (
-              <div className="w-11 h-11 rounded-xl overflow-hidden bg-black/60 border border-white/[0.08] flex items-center justify-center shrink-0 shadow-md p-1" title="MyCastNow - Listener Space">
-                <img src="/logo.png" alt="MyCastNow" className="w-full h-full object-cover object-left mix-blend-screen" />
-              </div>
+              <>
+                <div className="hidden md:flex w-11 h-11 rounded-xl overflow-hidden bg-black/60 border border-white/[0.08] items-center justify-center shrink-0 shadow-md p-1" title="MyCastNow - Listener Space">
+                  <img src="/logo.png" alt="MyCastNow" className="w-full h-full object-cover object-left mix-blend-screen" />
+                </div>
+                <div className="md:hidden flex flex-col justify-center min-w-0 py-1">
+                  <img
+                    src="/logo.png"
+                    alt="MyCastNow"
+                    className="h-11 w-auto max-w-[180px] object-contain object-left mix-blend-screen"
+                  />
+                  <div className="flex items-center gap-1.5 mt-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest leading-none">
+                      Listener Space
+                    </span>
+                  </div>
+                </div>
+              </>
             ) : (
               <div className="flex flex-col justify-center min-w-0 w-full py-1">
                 <img
                   src="/logo.png"
                   alt="MyCastNow"
-                  className="h-11 w-auto max-w-[200px] object-contain object-left mix-blend-screen"
+                  className="h-11 w-auto max-w-[180px] object-contain object-left mix-blend-screen"
                 />
                 <div className="flex items-center gap-1.5 mt-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -117,23 +148,33 @@ const UserDashboard = () => {
                 </div>
               </div>
             )}
+
+            {/* Mobile close button */}
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="md:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors shrink-0 ml-2"
+              title="Close menu"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
 
           {/* Top Navigation Links (Overview) */}
           <div className="p-2.5 space-y-1.5">
-            {!collapsed && (
-              <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-3 py-2 block">
-                Main Menu
-              </span>
-            )}
+            <span className={`text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-3 py-2 block ${collapsed ? 'md:hidden' : ''}`}>
+              Main Menu
+            </span>
             {TOP_NAV_ITEMS.map((item) => {
               const active = isActiveRoute(item);
               return (
                 <Link
                   key={item.name}
                   to={item.path}
+                  onClick={() => setMobileOpen(false)}
                   className={`flex items-center rounded-xl text-sm font-medium transition-all duration-150 group relative ${
-                    collapsed ? 'justify-center w-11 h-11 mx-auto' : 'gap-3.5 px-3 py-2.5'
+                    collapsed ? 'md:justify-center md:w-11 md:h-11 md:mx-auto gap-3.5 px-3 py-2.5' : 'gap-3.5 px-3 py-2.5'
                   } ${
                     active
                       ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/10 text-emerald-300 border border-emerald-500/30 shadow-sm'
@@ -141,15 +182,12 @@ const UserDashboard = () => {
                   }`}
                   title={collapsed ? item.name : undefined}
                 >
-                  <span className={`${active ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                  <span className={`${active ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-200'} shrink-0`}>
                     {item.icon}
                   </span>
-                  {!collapsed && <span>{item.name}</span>}
-                  {active && !collapsed && (
-                    <span className="absolute right-2 w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  )}
-                  {active && collapsed && (
-                    <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  <span className={collapsed ? 'md:hidden' : ''}>{item.name}</span>
+                  {active && (
+                    <span className={`w-1.5 h-1.5 rounded-full bg-emerald-400 ${collapsed ? 'md:absolute md:top-1.5 md:right-1.5 ml-auto' : 'ml-auto'}`} />
                   )}
                 </Link>
               );
@@ -160,19 +198,18 @@ const UserDashboard = () => {
         {/* ── Bottom Section (Profile, Setting, Help) ── */}
         <div className="border-t border-white/[0.06] bg-black/20">
           <div className="p-2.5 space-y-1.5">
-            {!collapsed && (
-              <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-3 py-1.5 block">
-                Preferences & Support
-              </span>
-            )}
+            <span className={`text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-3 py-1.5 block ${collapsed ? 'md:hidden' : ''}`}>
+              Preferences & Support
+            </span>
             {BOTTOM_NAV_ITEMS.map((item) => {
               const active = isActiveRoute(item);
               return (
                 <Link
                   key={item.name}
                   to={item.path}
+                  onClick={() => setMobileOpen(false)}
                   className={`flex items-center rounded-xl text-sm font-medium transition-all duration-150 group relative ${
-                    collapsed ? 'justify-center w-11 h-11 mx-auto' : 'gap-3.5 px-3 py-2.5'
+                    collapsed ? 'md:justify-center md:w-11 md:h-11 md:mx-auto gap-3.5 px-3 py-2.5' : 'gap-3.5 px-3 py-2.5'
                   } ${
                     active
                       ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/10 text-emerald-300 border border-emerald-500/30 shadow-sm'
@@ -180,15 +217,12 @@ const UserDashboard = () => {
                   }`}
                   title={collapsed ? item.name : undefined}
                 >
-                  <span className={`${active ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                  <span className={`${active ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-200'} shrink-0`}>
                     {item.icon}
                   </span>
-                  {!collapsed && <span>{item.name}</span>}
-                  {active && !collapsed && (
-                    <span className="absolute right-2 w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  )}
-                  {active && collapsed && (
-                    <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  <span className={collapsed ? 'md:hidden' : ''}>{item.name}</span>
+                  {active && (
+                    <span className={`w-1.5 h-1.5 rounded-full bg-emerald-400 ${collapsed ? 'md:absolute md:top-1.5 md:right-1.5 ml-auto' : 'ml-auto'}`} />
                   )}
                 </Link>
               );
@@ -197,16 +231,15 @@ const UserDashboard = () => {
 
           {/* Sidebar Footer info */}
           <div className="p-3.5 px-4 border-t border-white/[0.06]">
-            {!collapsed ? (
-              <div className="text-[11px] text-slate-500 flex items-center justify-between">
-                <span>Listener v2.4</span>
-                <span className="flex items-center gap-1.5 text-emerald-400">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  Hi-Fi 320k
-                </span>
-              </div>
-            ) : (
-              <div className="flex justify-center">
+            <div className={`text-[11px] text-slate-500 flex items-center justify-between ${collapsed ? 'md:hidden' : ''}`}>
+              <span>Listener v2.4</span>
+              <span className="flex items-center gap-1.5 text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Hi-Fi 320k
+              </span>
+            </div>
+            {collapsed && (
+              <div className="hidden md:flex justify-center">
                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
               </div>
             )}
@@ -218,10 +251,16 @@ const UserDashboard = () => {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Navbar */}
         <header className="h-16 bg-[#070e13]/80 backdrop-blur-xl border-b border-white/[0.07] px-4 sm:px-6 flex items-center justify-between shrink-0 relative z-20">
-          <div className="flex items-center gap-3.5">
-            {/* Sidebar Collapse Toggle Button */}
+          <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
+            {/* Sidebar Collapse / Mobile Drawer Toggle Button */}
             <button
-              onClick={() => setCollapsed(!collapsed)}
+              onClick={() => {
+                if (window.innerWidth < 768) {
+                  setMobileOpen(!mobileOpen);
+                } else {
+                  setCollapsed(!collapsed);
+                }
+              }}
               title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-slate-400 hover:text-emerald-300 hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-all duration-200 shrink-0"
             >
@@ -230,11 +269,11 @@ const UserDashboard = () => {
               </svg>
             </button>
 
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">
               🎧 Listener Space
             </span>
             <span className="text-slate-500 hidden sm:inline">/</span>
-            <span className="text-xs text-slate-400 hidden sm:inline capitalize">
+            <span className="text-xs text-slate-400 hidden sm:inline capitalize truncate">
               {location.pathname.replace('/user-dashboard', '').replace('/', '') || 'Overview'}
             </span>
           </div>

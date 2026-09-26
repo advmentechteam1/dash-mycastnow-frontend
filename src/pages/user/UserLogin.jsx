@@ -76,7 +76,7 @@ const UserLogin = () => {
         </div>
 
         {/* Card */}
-        <div className="bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] rounded-2xl p-7 shadow-2xl">
+        <div className="bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] rounded-2xl p-5 sm:p-7 shadow-2xl">
           {/* Tab Selector */}
           <div className="grid grid-cols-2 gap-1.5 p-1 bg-white/[0.04] border border-white/[0.06] rounded-xl mb-6">
             <button

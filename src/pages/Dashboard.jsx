@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { NavLink, Routes, Route, Navigate } from 'react-router-dom';
+import { NavLink, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Overview from './Overview';
 import Admins from './Admins';
@@ -72,13 +72,20 @@ const HamburgerIcon = () => (
 const Dashboard = () => {
   const { superAdmin, logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
+  const location = useLocation();
 
   const getInitials = (name) => {
     if (!name) return 'SA';
     return name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2);
   };
+
+  // Close mobile drawer on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
 
   // Close user menu on outside click
   useEffect(() => {
@@ -94,30 +101,56 @@ const Dashboard = () => {
   return (
     <div className="h-screen bg-[#060912] flex overflow-hidden">
 
+      {/* ── Mobile Drawer Backdrop ── */}
+      {mobileOpen && (
+        <div
+          onClick={() => setMobileOpen(false)}
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 md:hidden transition-opacity"
+        />
+      )}
+
       {/* ── Sidebar ── */}
       <aside
-        className={`h-screen shrink-0 flex flex-col bg-white/[0.03] border-r border-white/[0.06] relative overflow-hidden
-          transition-all duration-300 ease-in-out
-          ${collapsed ? 'w-[68px]' : 'w-64'}`}
+        className={`h-screen shrink-0 flex flex-col bg-[#060912] md:bg-white/[0.03] border-r border-white/[0.06] overflow-hidden
+          fixed inset-y-0 left-0 z-50 md:relative md:z-auto transition-all duration-300 ease-in-out
+          ${mobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'}
+          ${collapsed ? 'w-64 md:w-[68px]' : 'w-64'}`}
       >
         {/* Sidebar glow */}
         <div className="absolute top-0 left-0 w-full h-40 bg-violet-600/5 pointer-events-none" />
 
         {/* Logo area */}
-        <div className={`flex items-center border-b border-white/[0.06] shrink-0 overflow-hidden
+        <div className={`flex items-center justify-between border-b border-white/[0.06] shrink-0 overflow-hidden
           transition-all duration-300
-          ${collapsed ? 'h-16 px-3 justify-center' : 'h-[78px] px-4'}`}
+          ${collapsed ? 'h-16 px-3 md:justify-center' : 'h-[78px] px-4'}`}
         >
           {collapsed ? (
-            <div className="w-11 h-11 rounded-xl overflow-hidden bg-black/60 border border-white/[0.08] flex items-center justify-center shrink-0 shadow-md p-1" title="MyCastNow - Super Admin">
-              <img src="/logo.png" alt="MyCastNow" className="w-full h-full object-cover object-left mix-blend-screen" />
-            </div>
+            <>
+              {/* Desktop Collapsed Icon */}
+              <div className="hidden md:flex w-11 h-11 rounded-xl overflow-hidden bg-black/60 border border-white/[0.08] items-center justify-center shrink-0 shadow-md p-1" title="MyCastNow - Super Admin">
+                <img src="/logo.png" alt="MyCastNow" className="w-full h-full object-cover object-left mix-blend-screen" />
+              </div>
+              {/* Mobile Drawer (Always Full Logo) */}
+              <div className="md:hidden flex flex-col justify-center min-w-0 py-1">
+                <img
+                  src="/logo.png"
+                  alt="MyCastNow"
+                  className="h-11 w-auto max-w-[180px] object-contain object-left mix-blend-screen"
+                />
+                <div className="flex items-center gap-1.5 mt-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+                  <span className="text-[10px] font-bold text-violet-400 uppercase tracking-widest leading-none">
+                    Super Admin
+                  </span>
+                </div>
+              </div>
+            </>
           ) : (
             <div className="flex flex-col justify-center min-w-0 w-full py-1">
               <img
                 src="/logo.png"
                 alt="MyCastNow"
-                className="h-11 w-auto max-w-[200px] object-contain object-left mix-blend-screen"
+                className="h-11 w-auto max-w-[180px] object-contain object-left mix-blend-screen"
               />
               <div className="flex items-center gap-1.5 mt-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
@@ -127,13 +160,24 @@ const Dashboard = () => {
               </div>
             </div>
           )}
+
+          {/* Close button on mobile drawer */}
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="md:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors shrink-0 ml-2"
+            title="Close menu"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 px-2.5 py-4 flex flex-col">
+        <nav className="flex-1 px-2.5 py-4 flex flex-col overflow-y-auto">
           {/* Top section: Overview + Admins */}
           <div className="space-y-1">
-            <div className={`overflow-hidden transition-all duration-300 ${collapsed ? 'h-0 opacity-0 mb-0' : 'h-6 opacity-100 mb-1'}`}>
+            <div className={`overflow-hidden transition-all duration-300 ${collapsed ? 'md:h-0 md:opacity-0 md:mb-0 h-6 opacity-100 mb-1' : 'h-6 opacity-100 mb-1'}`}>
               <p className="text-slate-600 text-[10px] font-semibold uppercase tracking-widest px-2 whitespace-nowrap">
                 Main Menu
               </p>
@@ -144,9 +188,10 @@ const Dashboard = () => {
                 to={item.path}
                 id={`nav-${item.id}`}
                 title={collapsed ? item.label : ''}
+                onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
                   `flex items-center rounded-xl text-sm font-medium transition-all duration-200 group overflow-hidden
-                  ${collapsed ? 'justify-center px-0 py-2.5 mx-auto w-11 h-11' : 'gap-3 px-3 py-2.5'}
+                  ${collapsed ? 'md:justify-center md:px-0 md:py-2.5 md:mx-auto md:w-11 md:h-11 gap-3 px-3 py-2.5' : 'gap-3 px-3 py-2.5'}
                   ${isActive
                     ? 'bg-violet-600/20 text-violet-300 border border-violet-500/20'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.05]'
@@ -158,10 +203,10 @@ const Dashboard = () => {
                     <span className={`shrink-0 transition-colors ${isActive ? 'text-violet-400' : 'text-slate-500 group-hover:text-slate-300'}`}>
                       {item.icon}
                     </span>
-                    <span className={`whitespace-nowrap transition-all duration-300 ${collapsed ? 'w-0 opacity-0 overflow-hidden' : 'w-auto opacity-100'}`}>
+                    <span className={`whitespace-nowrap transition-all duration-300 ${collapsed ? 'md:w-0 md:opacity-0 md:overflow-hidden w-auto opacity-100' : 'w-auto opacity-100'}`}>
                       {item.label}
                     </span>
-                    {isActive && !collapsed && (
+                    {isActive && (!collapsed || window.innerWidth < 768) && (
                       <span className="ml-auto w-1.5 h-1.5 rounded-full bg-violet-400 shrink-0" />
                     )}
                   </>
@@ -175,7 +220,7 @@ const Dashboard = () => {
 
           {/* Bottom section: Settings, Profile, Help */}
           <div className="space-y-1">
-            <div className={`overflow-hidden transition-all duration-300 ${collapsed ? 'h-0 opacity-0 mb-0' : 'h-6 opacity-100 mb-1'}`}>
+            <div className={`overflow-hidden transition-all duration-300 ${collapsed ? 'md:h-0 md:opacity-0 md:mb-0 h-6 opacity-100 mb-1' : 'h-6 opacity-100 mb-1'}`}>
               <p className="text-slate-600 text-[10px] font-semibold uppercase tracking-widest px-2 whitespace-nowrap">
                 Account
               </p>
@@ -186,9 +231,10 @@ const Dashboard = () => {
                 to={item.path}
                 id={`nav-${item.id}`}
                 title={collapsed ? item.label : ''}
+                onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
                   `flex items-center rounded-xl text-sm font-medium transition-all duration-200 group overflow-hidden
-                  ${collapsed ? 'justify-center px-0 py-2.5 mx-auto w-11 h-11' : 'gap-3 px-3 py-2.5'}
+                  ${collapsed ? 'md:justify-center md:px-0 md:py-2.5 md:mx-auto md:w-11 md:h-11 gap-3 px-3 py-2.5' : 'gap-3 px-3 py-2.5'}
                   ${isActive
                     ? 'bg-violet-600/20 text-violet-300 border border-violet-500/20'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.05]'
@@ -200,10 +246,10 @@ const Dashboard = () => {
                     <span className={`shrink-0 transition-colors ${isActive ? 'text-violet-400' : 'text-slate-500 group-hover:text-slate-300'}`}>
                       {item.icon}
                     </span>
-                    <span className={`whitespace-nowrap transition-all duration-300 ${collapsed ? 'w-0 opacity-0 overflow-hidden' : 'w-auto opacity-100'}`}>
+                    <span className={`whitespace-nowrap transition-all duration-300 ${collapsed ? 'md:w-0 md:opacity-0 md:overflow-hidden w-auto opacity-100' : 'w-auto opacity-100'}`}>
                       {item.label}
                     </span>
-                    {isActive && !collapsed && (
+                    {isActive && (!collapsed || window.innerWidth < 768) && (
                       <span className="ml-auto w-1.5 h-1.5 rounded-full bg-violet-400 shrink-0" />
                     )}
                   </>
@@ -215,36 +261,43 @@ const Dashboard = () => {
       </aside>
 
       {/* ── Main Content ── */}
-      <main className="flex-1 flex flex-col h-screen overflow-hidden">
+      <main className="flex-1 flex flex-col h-screen overflow-hidden min-w-0">
 
         {/* Top bar */}
-        <header className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] bg-white/[0.02] backdrop-blur-sm shrink-0">
-          <div className="flex items-center gap-4">
+        <header className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 border-b border-white/[0.06] bg-white/[0.02] backdrop-blur-sm shrink-0">
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0">
 
             {/* Hamburger Toggle */}
             <button
               id="sidebar-toggle-btn"
-              onClick={() => setCollapsed((prev) => !prev)}
+              onClick={() => {
+                if (window.innerWidth < 768) {
+                  setMobileOpen((prev) => !prev);
+                } else {
+                  setCollapsed((prev) => !prev);
+                }
+              }}
               title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-              className="w-9 h-9 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-slate-400 hover:text-violet-300 hover:bg-violet-500/10 hover:border-violet-500/30 transition-all duration-200"
+              className="w-9 h-9 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-slate-400 hover:text-violet-300 hover:bg-violet-500/10 hover:border-violet-500/30 transition-all duration-200 shrink-0"
             >
               <HamburgerIcon />
             </button>
 
             {/* Page title */}
-            <div>
-              <Routes>
-                <Route path="/overview" element={<span className="text-white font-semibold">Overview</span>} />
-                <Route path="/admins"   element={<span className="text-white font-semibold">Admins</span>} />
-                <Route path="/settings" element={<span className="text-white font-semibold">Settings</span>} />
-                <Route path="/profile"  element={<span className="text-white font-semibold">Profile</span>} />
-                <Route path="/help"     element={<span className="text-white font-semibold">Help</span>} />
-                <Route path="*"         element={<span className="text-white font-semibold">Dashboard</span>} />
-              </Routes>
-              <p className="text-slate-500 text-xs mt-0.5">MyCastNow Super Admin Dashboard</p>
+            <div className="min-w-0">
+              <div className="truncate">
+                <Routes>
+                  <Route path="/overview" element={<span className="text-white font-semibold text-sm sm:text-base">Overview</span>} />
+                  <Route path="/admins"   element={<span className="text-white font-semibold text-sm sm:text-base">Admins</span>} />
+                  <Route path="/settings" element={<span className="text-white font-semibold text-sm sm:text-base">Settings</span>} />
+                  <Route path="/profile"  element={<span className="text-white font-semibold text-sm sm:text-base">Profile</span>} />
+                  <Route path="/help"     element={<span className="text-white font-semibold text-sm sm:text-base">Help</span>} />
+                  <Route path="*"         element={<span className="text-white font-semibold text-sm sm:text-base">Dashboard</span>} />
+                </Routes>
+              </div>
+              <p className="text-slate-500 text-[11px] sm:text-xs mt-0.5 truncate hidden xs:block">MyCastNow Super Admin</p>
             </div>
           </div>
-
           <div className="flex items-center gap-3">
             {/* Notification bell */}
             <button className="w-9 h-9 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.08] transition-all">
@@ -263,7 +316,7 @@ const Dashboard = () => {
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center text-white text-xs font-bold shadow-lg shadow-violet-500/20 shrink-0">
                   {getInitials(superAdmin?.name)}
                 </div>
-                <div className="text-left">
+                <div className="text-left hidden sm:block">
                   <p className="text-white text-xs font-semibold leading-none">{superAdmin?.name || 'Super Admin'}</p>
                   <p className="text-slate-500 text-[10px] mt-0.5 truncate max-w-[140px]">{superAdmin?.email}</p>
                 </div>

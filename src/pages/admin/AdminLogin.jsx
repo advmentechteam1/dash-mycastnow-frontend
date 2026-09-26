@@ -61,15 +61,15 @@ const AdminLogin = () => {
         </div>
 
         {/* Card */}
-        <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-8 shadow-2xl">
-          <div className="mb-6 flex items-center justify-between">
+        <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-5 sm:p-8 shadow-2xl">
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="text-xl font-semibold text-white">Admin Sign In</h2>
               <p className="text-slate-400 text-xs mt-1">Access your station dashboard</p>
             </div>
             <Link
               to="/login"
-              className="text-xs text-slate-400 hover:text-cyan-400 transition-colors"
+              className="text-xs text-slate-400 hover:text-cyan-400 transition-colors w-fit"
             >
               Super Admin? →
             </Link>

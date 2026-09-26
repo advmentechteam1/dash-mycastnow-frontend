@@ -63,8 +63,8 @@ const Login = () => {
         </div>
 
         {/* Card */}
-        <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-8 shadow-2xl">
-          <div className="mb-6 flex items-center justify-between">
+        <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-5 sm:p-8 shadow-2xl">
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="text-xl font-semibold text-white">Super Admin</h2>
               <p className="text-slate-400 text-xs mt-1">Sign in with master credentials</p>

@@ -102,9 +102,9 @@ const Overview = () => {
   };
 
   return (
-    <div className="p-8 space-y-8">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
       {/* Welcome banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-violet-600/30 via-indigo-600/20 to-purple-600/10 border border-violet-500/20 p-6">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-violet-600/30 via-indigo-600/20 to-purple-600/10 border border-violet-500/20 p-5 sm:p-6">
         <div className="absolute -right-10 -top-10 w-48 h-48 bg-violet-500/10 rounded-full blur-2xl pointer-events-none" />
         <div className="absolute -right-4 top-4 opacity-10 pointer-events-none">
           <svg className="w-32 h-32 text-violet-400" fill="currentColor" viewBox="0 0 24 24">
@@ -113,11 +113,11 @@ const Overview = () => {
         </div>
         <div className="relative">
           <p className="text-violet-300 text-sm font-medium">{getGreeting()},</p>
-          <h1 className="text-white text-2xl font-bold mt-1">{superAdmin?.name || 'Super Admin'} 👋</h1>
-          <p className="text-slate-400 text-sm mt-2 max-w-md">
+          <h1 className="text-white text-xl sm:text-2xl font-bold mt-1">{superAdmin?.name || 'Super Admin'} 👋</h1>
+          <p className="text-slate-400 text-xs sm:text-sm mt-2 max-w-md">
             Welcome to MyCastNow Super Admin Dashboard. Here's what's happening today.
           </p>
-          <div className="flex items-center gap-2 mt-4">
+          <div className="flex flex-wrap items-center gap-2 mt-4">
             <div className="flex items-center gap-1.5 bg-white/10 rounded-lg px-3 py-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-emerald-300 text-xs font-medium">System Online</span>
@@ -127,7 +127,7 @@ const Overview = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span className="text-slate-300 text-xs">
-                {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                {new Date().toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
               </span>
             </div>
           </div>
