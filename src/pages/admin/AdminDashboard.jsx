@@ -94,20 +94,27 @@ const AdminDashboard = () => {
         {/* Top: Logo area */}
         <div>
           <div
-            className={`flex items-center border-b border-white/[0.06] h-16 shrink-0 transition-all duration-300 ${
-              collapsed ? 'px-3.5 justify-center' : 'px-4 gap-2.5'
+            className={`flex items-center border-b border-white/[0.06] shrink-0 transition-all duration-300 ${
+              collapsed ? 'h-16 px-3 justify-center' : 'h-[78px] px-4'
             }`}
           >
             {collapsed ? (
-              <div className="w-10 h-10 rounded-xl overflow-hidden bg-black/60 border border-white/[0.08] flex items-center justify-center shrink-0 shadow-md" title="MyCastNow - Admin Portal">
-                <img src="/logo.png" alt="MyCastNow" className="w-10 h-10 object-cover object-left" />
+              <div className="w-11 h-11 rounded-xl overflow-hidden bg-black/60 border border-white/[0.08] flex items-center justify-center shrink-0 shadow-md p-1" title="MyCastNow - Admin Portal">
+                <img src="/logo.png" alt="MyCastNow" className="w-full h-full object-cover object-left mix-blend-screen" />
               </div>
             ) : (
-              <div className="flex flex-col min-w-0">
-                <img src="/logo.png" alt="MyCastNow" className="h-8 max-w-[170px] object-contain object-left" />
-                <span className="text-[10px] font-semibold text-cyan-400 uppercase tracking-widest mt-0.5 whitespace-nowrap">
-                  Admin Portal
-                </span>
+              <div className="flex flex-col justify-center min-w-0 w-full py-1">
+                <img
+                  src="/logo.png"
+                  alt="MyCastNow"
+                  className="h-11 w-auto max-w-[200px] object-contain object-left mix-blend-screen"
+                />
+                <div className="flex items-center gap-1.5 mt-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                  <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest leading-none">
+                    Admin Portal
+                  </span>
+                </div>
               </div>
             )}
           </div>
